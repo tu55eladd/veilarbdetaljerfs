@@ -2,7 +2,6 @@ import { UnderOppfolgingData } from '../../api/datatyper/underOppfolgingData';
 import { OppfolgingsstatusData } from '../../api/datatyper/oppfolgingsstatus';
 import { delay, graphql, http, HttpResponse, RequestHandler } from 'msw';
 import { DEFAULT_DELAY_MILLISECONDS, hentSimulerEndepunktResponsKonfigurasjon } from './index.ts';
-import { OppfolgingData } from '../../api/datatyper/oppfolging.ts';
 import { endepunkter } from '../../api/fetch.ts';
 import { customResponseHeaders } from '../../api/datatyper/apiOptions.ts';
 import { OppfolgingsData } from '../../api/veilarboppfolgingGraphql.ts';
@@ -23,20 +22,6 @@ const oppfolgingstatus: OppfolgingsstatusData = {
     formidlingsgruppe: 'ARBS',
     servicegruppe: 'BKART',
     hovedmaalkode: 'OKEDELT'
-};
-
-const oppfolgingData: OppfolgingData = {
-    erIkkeArbeidssokerUtenOppfolging: true,
-    fnr: '12345678910',
-    harSkriveTilgang: true,
-    kanStarteOppfolging: true,
-    kanVarsles: false,
-    manuell: false,
-    oppfolgingsPerioder: [],
-    reservasjonKRR: true,
-    registrertKRR: true,
-    underKvp: false,
-    underOppfolging: true
 };
 
 const oppfolgingsEnhet: OppfolgingsData = {
@@ -81,21 +66,6 @@ export const veilarboppfolgingHandlers: RequestHandler[] = [
         }
 
         return HttpResponse.json(oppfolging, {
-            headers: { [customResponseHeaders.NAV_CALL_ID]: crypto.randomUUID() }
-        });
-    }),
-    http.post(endepunkter.VEILARBOPPFOLGING_HENT_STATUS, async () => {
-        await delay(DEFAULT_DELAY_MILLISECONDS);
-
-        const simulerEndepunktResponsKonfigurasjon = hentSimulerEndepunktResponsKonfigurasjon(
-            endepunkter.VEILARBOPPFOLGING_HENT_STATUS
-        );
-
-        if (simulerEndepunktResponsKonfigurasjon !== null) {
-            return simulerEndepunktResponsKonfigurasjon;
-        }
-
-        return HttpResponse.json(oppfolgingData, {
             headers: { [customResponseHeaders.NAV_CALL_ID]: crypto.randomUUID() }
         });
     }),

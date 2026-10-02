@@ -12,7 +12,6 @@ import { FrontendEvent } from '../../utils/logger';
 import useSWR from 'swr';
 import { OpplysningerOmArbeidssoker, Profilering } from '@navikt/arbeidssokerregisteret-utils';
 import { FullmaktData } from './datatyper/fullmakt.ts';
-import { OppfolgingData } from './datatyper/oppfolging.ts';
 import { Kodeverk14a } from './datatyper/kodeverk14aData.ts';
 import {
     hentOppfolgingsEnhetQuery,
@@ -72,7 +71,6 @@ export const endepunkter = {
     VEILARBPERSON_HENT_FULLMAKT: '/veilarbperson/api/v3/person/hent-fullmakt',
     VEILARBPERSON_HENT_AKTORID: '/veilarbperson/api/v3/person/hent-aktorid',
     VEILARBOPPFOLGING_HENT_UNDER_OPPFOLGING: '/veilarboppfolging/api/v2/hent-underOppfolging',
-    VEILARBOPPFOLGING_HENT_STATUS: '/veilarboppfolging/api/v3/oppfolging/hent-status',
     VEILARBOPPFOLGING_HENT_OPPFOLGINGSSTATUS: '/veilarboppfolging/api/v2/person/hent-oppfolgingsstatus',
     VEILARBOPPFOLGING_GRAPHQL: '/veilarboppfolging/api/graphql',
     VEILARBVEDTAKSSTOTTE_HENT_GJELDENDE_14A_VEDTAK: '/veilarbvedtaksstotte/api/hent-gjeldende-14a-vedtak',
@@ -163,15 +161,6 @@ export const useUnderOppfolging = (fnr?: string) => {
     const { data, error, isLoading } = useSWR<UnderOppfolgingData, ErrorMessage>(
         fnr ? [endepunkter.VEILARBOPPFOLGING_HENT_UNDER_OPPFOLGING, fnr] : null,
         () => fetchWithPost(endepunkter.VEILARBOPPFOLGING_HENT_UNDER_OPPFOLGING, { fnr: fnr ?? null })
-    );
-
-    return { data, isLoading, error };
-};
-
-export const useOppfolging = (fnr?: string) => {
-    const { data, error, isLoading } = useSWR<OppfolgingData, ErrorMessage>(
-        fnr ? [endepunkter.VEILARBOPPFOLGING_HENT_STATUS, fnr] : null,
-        () => fetchWithPost(endepunkter.VEILARBOPPFOLGING_HENT_STATUS, { fnr: fnr ?? null })
     );
 
     return { data, isLoading, error };
